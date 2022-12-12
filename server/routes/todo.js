@@ -1,38 +1,88 @@
 const express = require("express");
 const { Todo } = require("../models");
-
 const router = express.Router();
 
-//기본주소: localhost:PORT/
+// 기본주소: localhost:PORT/
 
-//GET localhost:PORT/todos - show all todos (READ)
+// GET localhost:PORT/todos - show all todos (READ)
 router.get("/todos", async (req, res) => {
-  try {
-    let todos = await Todo.findAll();
+  // Todo.findAll().then((data) => {
+  //   res.send(data);
+  // });
 
-    console.log(todos);
-    res.send(todos);
+  try {
+    let data = await Todo.findAll();
+    res.send(data);
   } catch (err) {
     res.send(err);
   }
-
-  //밑 줄의 코드와 같다.
-  // Todo.findAll().then((data) => {
-  //     console.log(data);
-  //     res.send(data);
-  // }).catch로 예외처리;
 });
 
-//POST localhost: PORT/todo - create a new todo (CREATE)
+// POST localhost:PORT/todo - create a new todo (CREATE)
 router.post("/todo", async (req, res) => {
   try {
     let newTodo = await Todo.create({
       title: req.body.title,
-      //done: req.body.done, - 안해줘도 된다. //기본값 0.
     });
-
-    console.log(newTodo);
     res.send(newTodo);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// PATCH localhost:PORT/todo/:todoId - edit a specific todo (UPDATE)
+// 수정 성공시; true -> res.send(true)
+// 수정 실패시; false -> res.send(false)
+router.patch("/todo/:todoId", async (req, res) => {
+  // console.log(req.body); // { title: 'my todo - 수정', done: true }
+  // console.log(req.params); // { todoId: '1' }
+  try {
+    let [isUpdated] = await Todo.update(
+      {
+        title: req.body.title,
+        done: req.body.done,
+      },
+      {
+        where: {
+          id: req.params.todoId,
+        },
+      }
+    );
+    // console.log(isUpdated);
+    // 수정 성공시; [ 1 ] -> 1
+    // 수정 실패시; [ 0 ] -> 0
+
+    // 수정 실패 (!0)
+    if (!isUpdated) {
+      return res.send(false);
+    }
+
+    // 수정 성공
+    res.send(true);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// DELETE localhost:PORT/todo/:todoId - remove a specific todo (DELETE)
+router.delete("/todo/:todoId", async (req, res) => {
+  // console.log(req.params); // { todoId: '8' }
+
+  try {
+    let isDeleted = await Todo.destroy({
+      where: {
+        id: req.params.todoId,
+      },
+    });
+    // console.log(isDeleted); // 1 or 0
+
+    // 삭제 실패 (!0)
+    if (!isDeleted) {
+      return res.send(false);
+    }
+
+    // 삭제 성공
+    res.send(true);
   } catch (err) {
     res.send(err);
   }
