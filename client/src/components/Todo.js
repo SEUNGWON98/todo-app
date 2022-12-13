@@ -2,11 +2,42 @@ import { useState } from "react";
 
 const Todo = ({ item, deleteItem }) => {
   // console.log(item); // {id: 1, title: 'todo1', done: false, }
-  // const { id, title, done } = item;
+  const { id, title, done } = item;
   const [todoItem, setTodoItem] = useState(item);
+  const [readOnly, setReadOnly] = useState(true);
+
+  const OnInputClick = () => {
+    setReadOnly(false);
+  };
+
+  const enterKeyEventHandler = (e) => {
+    if (e.key === "Enter") {
+      setReadOnly(true);
+    }
+  };
+
+  const checkbox = () => {
+    if (readOnly == true) {
+      setReadOnly(false);
+    } else {
+      setReadOnly(true);
+    }
+  };
 
   const OnClickDelete = () => {
     deleteItem(todoItem);
+  };
+
+  // title input 커서가 깜빡인다고 수정이 가능한 것은 아님
+  // 사용자가 키보드 입력할 때마다 todoItem의 title을 새 값으로 변경
+  const editEventHandler = (e) => {
+    //rest: id, done 정보
+    const { title, ...rest } = todoItem;
+
+    setTodoItem({
+      title: e.target.value,
+      ...rest,
+    });
   };
 
   return (
@@ -17,8 +48,18 @@ const Todo = ({ item, deleteItem }) => {
         name={`todo${item.id}`}
         value={`todo${item.id}`}
         defaultChecked={item.done}
+        onClick={checkbox}
       />
-      <label htmlFor={`todo${item.id}`}>{item.title}</label>
+      {/* <label htmlFor={`todo${id}`}>{title}</label> */}
+      <input
+        name="Todo"
+        type="text"
+        value={todoItem.title} //title로 하면 상태로 변경이 안된다
+        onChange={editEventHandler}
+        readOnly={readOnly}
+        onClick={OnInputClick}
+        onKeyPress={enterKeyEventHandler}
+      />
       <button onClick={OnClickDelete}>DELETE</button>
     </div>
   );
