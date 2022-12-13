@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 const AddTodo = ({ addItem }) => {
-  // const { addItem } = props;
+  // const { addItem } = props; //이걸 쓰려면 함수에 addItem이 아니라 props로 받아야 한다.
   // 사용자 입력을 저장할 객체
   // (id, title, done에 대한 정보를 저장해야해서 객체 형태로!!)
   const [todoItem, setTodoItem] = useState({
