@@ -16,12 +16,22 @@ const Todo = ({ item, deleteItem }) => {
     }
   };
 
-  const checkbox = () => {
-    if (readOnly == true) {
-      setReadOnly(false);
-    } else {
-      setReadOnly(true);
-    }
+  // const checkbox = () => {
+  //   if (readOnly == true) {
+  //     setReadOnly(false);
+  //   } else {
+  //     setReadOnly(true);
+  //   }
+  // };
+
+  // done: true -> false, fasle, -> true
+  const checkbox = (e) => {
+    // rest: id, title 정보
+    const { done, ...rest } = todoItem; // { id: 1, title: 'todo1', done: false, }
+    setTodoItem({
+      done: e.target.checked,
+      ...rest,
+    });
   };
 
   const OnClickDelete = () => {
