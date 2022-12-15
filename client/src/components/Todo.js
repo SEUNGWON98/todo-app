@@ -52,25 +52,32 @@ const Todo = ({ item, deleteItem }) => {
 
   return (
     <div className="Todo">
-      <input
-        type="checkbox"
-        id={`todo${item.id}`}
-        name={`todo${item.id}`}
-        value={`todo${item.id}`}
-        defaultChecked={item.done}
-        onClick={checkbox}
-      />
-      {/* <label htmlFor={`todo${id}`}>{title}</label> */}
-      <input
-        name="Todo"
-        type="text"
-        value={todoItem.title} //title로 하면 상태로 변경이 안된다
-        onChange={editEventHandler}
-        readOnly={readOnly}
-        onClick={OnInputClick}
-        onKeyPress={enterKeyEventHandler}
-      />
-      <button onClick={OnClickDelete}>DELETE</button>
+      <div className="TodoLists">
+        <input
+          type="checkbox"
+          id={`todo${item.id}`}
+          name={`todo${item.id}`}
+          value={`todo${item.id}`}
+          defaultChecked={item.done}
+          onClick={checkbox}
+        />
+        {/* <label htmlFor={`todo${id}`}>{title}</label> */}
+
+        <input
+          className="MyTodo"
+          name="Todo"
+          type="text"
+          value={todoItem.title} //title로 하면 상태로 변경이 안된다
+          onChange={editEventHandler}
+          readOnly={readOnly}
+          onClick={OnInputClick}
+          onKeyPress={enterKeyEventHandler}
+        />
+      </div>
+
+      <button onClick={OnClickDelete} className="removeTodo">
+        🗑️
+      </button>
     </div>
   );
 };

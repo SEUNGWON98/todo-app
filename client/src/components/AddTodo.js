@@ -12,6 +12,9 @@ const AddTodo = ({ addItem }) => {
   });
 
   const onButtononclick = () => {
+    if (todoItem.title.trim().length === 0) {
+      return;
+    }
     // props로 받아온 addItem 함수 실행
     addItem(todoItem); //{title: 'input입력값'}
     setTodoItem({ title: "" }); //input 초기화
@@ -25,14 +28,20 @@ const AddTodo = ({ addItem }) => {
 
   return (
     <div className="AddTodo">
-      <input
-        type="text"
-        placeholder="Add your new Todo"
-        value={todoItem.title}
-        onKeyPress={onKeyPress1}
-        onChange={(e) => setTodoItem({ title: e.target.value })}
-      />
-      <button onClick={onButtononclick}>ADD</button>
+      <header className="TodoListHeader">✌ 오늘 할 일 ✌</header>
+      <div className="AddListInput">
+        <input
+          className="Addlist"
+          type="text"
+          placeholder="Add your new Todo"
+          value={todoItem.title}
+          onKeyPress={onKeyPress1}
+          onChange={(e) => setTodoItem({ title: e.target.value })}
+        />
+        <button onClick={onButtononclick} className="AddBtn">
+          +
+        </button>
+      </div>
     </div>
   );
 };
