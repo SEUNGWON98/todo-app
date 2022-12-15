@@ -24,14 +24,17 @@ const App = () => {
     // axios.post(url, data)
 
     // [Before]
-    // newItem - {id: xx, title: xx, done: false}
-    /*newItem.id = todoId.current++; // key를 위한 id 설정
-    newItem.done = false; // done 초기화
-    // 기존 todoItems를 유지하고, 새로운 newItem을 추가
-    setTodoItems([...todoItems, newItem]); // setTodoItems(todoItems.concat(newItem))
-*/
+    // // newItem - {id: xx, title: xx, done: false}
+    // newItem.id = todoId.current++; // key를 위한 id 설정
+    // newItem.done = false; // done 초기화
+    // // 기존 todoItems를 유지하고, 새로운 newItem을 추가
+    // setTodoItems([...todoItems, newItem]); // setTodoItems(todoItems.concat(newItem))
+
+    // [After]
     const response = await axios.post("http://localhost:8080/todo", newItem);
-    console.log(response.data);
+    // console.log(response.data);
+    // 기존 아이템: ...todoItems
+    // 새로운 아이템: response.data
     setTodoItems([...todoItems, response.data]);
   };
 
@@ -49,15 +52,34 @@ const App = () => {
     setTodoItems(newTodoItems);
   };
 
+  // API를 이용해서 update하려면
+  // (1) server/routes/todo.js API를 이용해 서버 데이터를 업데이트 한 후
+  // (2) 변경된 내용을 화면에 다시 출력하는 작업
+  const updateItem = async (targetItem) => {
+    console.log(targetItem);
+    // axios.patch(url, data)
+    await axios.patch(
+      `http://localhost:8080/todo/${targetItem.id}`,
+      targetItem
+    );
+  };
+
   return (
     <div className="App">
-      <header>😀 Seo Todo App</header>
+      <header>😀 Sean Todo App</header>
       <AddTodo addItem={addItem} />
       <div className="left-todos">🚀 {todoItems.length} Todos</div>
       {todoItems.length > 0 ? (
         todoItems.map((item) => {
           // console.log(item); // {id: 1, title: 'My Todo1', done: false}
-          return <Todo key={item.id} item={item} deleteItem={deleteItem} />;
+          return (
+            <Todo
+              key={item.id}
+              item={item}
+              deleteItem={deleteItem}
+              updateItem={updateItem}
+            />
+          );
         })
       ) : (
         <p className="empty-todos">Todo를 추가해주세요🔥</p>
